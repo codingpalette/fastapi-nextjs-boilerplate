@@ -8,4 +8,4 @@ async def user_test():
     name = os.getenv("MY_NAME", "World")
     print(f"Hello {name} from Python")
     print('user_test')
-    return True
+    return {"data": name}
