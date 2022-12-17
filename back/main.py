@@ -1,5 +1,7 @@
 from fastapi import FastAPI
 from typing import Optional
+from core.config import settings
+from api.v1.api import api_router
 import uvicorn
 
 
@@ -21,6 +23,9 @@ def create_app():
     @app.get("/items/{item_id}")
     def read_item(item_id: int, q: Optional[str] = None):
         return {"item_id": item_id, "q": q}
+
+
+    app.include_router(api_router, prefix=settings.API_V1_STR)
 
     return app
 
