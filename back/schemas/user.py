@@ -9,3 +9,8 @@ class UserCreate(BaseModel):
     user_login_id: str
     user_password: str
     user_nickname: str
+
+
+class UserLogin(BaseModel):
+    user_login_id: str
+    user_password: str

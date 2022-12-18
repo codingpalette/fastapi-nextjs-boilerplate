@@ -4,7 +4,9 @@ from sqlalchemy.orm import Session
 from db.session import get_db
 from schemas import user
 from crud import crud_user
-import os, bcrypt
+from functions.token import token
+from core.config import settings
+import os, bcrypt, datetime
 
 router = APIRouter()
 
@@ -33,9 +35,9 @@ async def user_test2():
 @router.post('/create', summary="유저 생성")
 async def user_create(post_data: user.UserCreate, db: Session = Depends(get_db)):
     # 유저 체크
-    user_check = crud_user.user_create_check(post_data, db)
+    user_info = crud_user.user_find_one(post_data.user_login_id, db)
     # 유저가 있다고 하면 회원가입 불가
-    if user_check:
+    if user_info:
         raise HTTPException(status_code=401, detail={"result": "fail", "message": "이미 사용중인 아이디 입니다."})
 
     # 비밀번호 암호화
@@ -48,3 +50,52 @@ async def user_create(post_data: user.UserCreate, db: Session = Depends(get_db))
         return JSONResponse(status_code=200, content={"result": "success", "message": "회원가입에 성공 했습니다"})
     else:
         raise HTTPException(status_code=401, detail={"result": "fail", "message": "회원가입에 실패 했습니다."})
+
+@router.post('/login', summary="유저 로그인")
+async def user_login(post_data: user.UserLogin, db: Session = Depends(get_db)):
+    # 유저 체크
+    user_info = crud_user.user_find_one(post_data.user_login_id, db)
+    # 아이디가 있는지 검사
+    if not user_info:
+        return JSONResponse(status_code=401, content={"result": "fail", "message": "존재하지 않는 아이디 입니다"})
+
+    # 비밀번호 체크
+    password_check = bcrypt.checkpw(post_data.user_password.encode('utf-8'), user_info.user_password.encode('utf-8'))
+    if not password_check:
+        return JSONResponse(status_code=401, content={"result": "fail", "message": "비밀번호가 틀립니다"})
+
+    user_info.user_password = ''
+
+    # 토큰을 생성해 준다.
+    access_token = token.create_token("access_token", user_info)
+    refresh_token = token.create_token('refresh_token')
+
+    # DB 리프레시 토큰 업데이트
+    token_update = crud_user.user_refresh_token_update(user_info.user_login_id, refresh_token, db)
+    if token_update:
+        access_token_time = datetime.datetime.utcnow() + datetime.timedelta(days=settings.ACCESS_TOKEN_TIME)
+        refresh_token_time = datetime.datetime.utcnow() + datetime.timedelta(days=settings.REFRESH_TOKEN_TIME)
+        content = {"result": "success", "message": "로그인 성공"}
+        response = JSONResponse(content=content)
+        response.set_cookie(
+            key="access_token",
+            value=access_token,
+            secure=True,
+            httponly=True,
+            expires=access_token_time.strftime("%a, %d %b %Y %H:%M:%S GMT"),
+        )
+        response.set_cookie(
+            key="refresh_token",
+            value=refresh_token,
+            secure=True,
+            httponly=True,
+            expires=refresh_token_time.strftime("%a, %d %b %Y %H:%M:%S GMT"),
+        )
+        return response
+    else:
+        raise HTTPException(status_code=401, detail={"result": "fail", "message": "로그인에 실패했습니다."})
+
+
+@router.post('/logout', summary="로그아웃")
+async def user_logout():
+    return True
