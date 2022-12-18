@@ -8,7 +8,7 @@ SQLALCHEMY_DATABASE_URL = f'''{settings.DB_TYPE}://{settings.DB_USERNAME}:{setti
 
 print('SQLALCHEMY_DATABASE_URL', SQLALCHEMY_DATABASE_URL)
 
-engine = create_engine(SQLALCHEMY_DATABASE_URL, echo=True)
+engine = create_engine(SQLALCHEMY_DATABASE_URL, echo=False)
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
 Base = declarative_base()
