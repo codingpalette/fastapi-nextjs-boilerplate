@@ -33,3 +33,11 @@ def user_refresh_token_update(user_login_id: str, refresh_token: str, db: Sessio
     db.commit()
     db.refresh(user_info)
     return user_info
+
+
+def user_refresh_token_delete(user_login_id: str, db: Session) -> User:
+    user_info = user_find_one(user_login_id, db)
+    user_info.user_refresh_token = ''
+    db.commit()
+    db.refresh(user_info)
+    return user_info

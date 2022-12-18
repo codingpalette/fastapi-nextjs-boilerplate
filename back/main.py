@@ -4,6 +4,9 @@ from core.config import settings
 from api.v1.api import api_router
 from sqlalchemy.orm import Session
 from db.session import get_db, Base, engine
+from starlette.middleware.base import BaseHTTPMiddleware
+from fastapi.middleware.cors import CORSMiddleware
+from middlewares.user_middlewares import user_middlewares
 import uvicorn
 
 
@@ -18,6 +21,23 @@ description = f"""
 def create_app():
     Base.metadata.create_all(bind=engine)
     app = FastAPI(title="기본api", description=description)
+
+    origins = [
+        'http://localhost:3000',
+        'http://localhost:8000',
+    ]
+
+    not_logged_in_middleware = user_middlewares.not_logged_in
+    logged_in_middleware = user_middlewares.logged_in
+    app.add_middleware(BaseHTTPMiddleware, dispatch=not_logged_in_middleware)
+    app.add_middleware(BaseHTTPMiddleware, dispatch=logged_in_middleware)
+    app.add_middleware(
+        CORSMiddleware,
+        allow_origins=origins,
+        allow_credentials=True,
+        allow_methods=["*"],
+        allow_headers=["*"],
+    )
 
     @app.get("/")
     def read_root():

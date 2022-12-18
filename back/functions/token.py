@@ -11,6 +11,7 @@ class Token():
             # days->날짜 hours->시간, minutes->분, seconds->초
             # to_encode = user_info.copy()
             to_encode = jsonable_encoder(user_info)
+            del to_encode['user_password']
             to_encode.update({"exp": datetime.datetime.utcnow() + datetime.timedelta(days=settings.ACCESS_TOKEN_TIME)})
         else:
             to_encode = {'exp': datetime.datetime.utcnow() + datetime.timedelta(days=settings.REFRESH_TOKEN_TIME)}
