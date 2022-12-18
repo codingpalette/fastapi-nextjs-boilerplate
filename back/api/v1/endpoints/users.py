@@ -22,3 +22,8 @@ async def user_get(db: Session = Depends(get_db)):
     aa = crud_user.get_user(db)
     print(aa)
     return True
+
+
+@router.get('/test2')
+async def user_test2():
+    return True
