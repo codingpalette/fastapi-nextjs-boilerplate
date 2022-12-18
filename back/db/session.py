@@ -4,7 +4,7 @@ from sqlalchemy.ext.declarative import declarative_base  # Base 생성
 
 from core.config import settings
 
-SQLALCHEMY_DATABASE_URL = f'''{settings.DB_TYPE}://{settings.DB_USERNAME}:{settings.DB_PASSWORD}@{settings.DB_HOST}:3306/{settings.DB_DATABASE}'''
+SQLALCHEMY_DATABASE_URL = f'''{settings.DB_TYPE}://{settings.DB_USERNAME}:{settings.DB_PASSWORD}@{settings.DB_HOST}:{settings.DB_PORT}/{settings.DB_DATABASE}'''
 
 print('SQLALCHEMY_DATABASE_URL', SQLALCHEMY_DATABASE_URL)
 
