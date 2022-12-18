@@ -9,6 +9,7 @@ class Settings(BaseSettings):
     ACCESS_TOKEN_TIME = 1
     REFRESH_TOKEN_TIME = 14
 
+    DB_TYPE: str = 'mysql+pymysql'
     DB_HOST: str = os.getenv('DB_HOST', 'localhost')
     DB_USERNAME: str = os.getenv('DB_USERNAME', 'root')
     DB_PASSWORD: str = os.getenv('DB_PASSWORD', 'root')

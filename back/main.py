@@ -2,6 +2,8 @@ from fastapi import FastAPI
 from typing import Optional
 from core.config import settings
 from api.v1.api import api_router
+from sqlalchemy.orm import Session
+from db.session import get_db, Base, engine
 import uvicorn
 
 
@@ -14,6 +16,7 @@ description = f"""
 """
 
 def create_app():
+    Base.metadata.create_all(bind=engine)
     app = FastAPI(title="기본api", description=description)
 
     @app.get("/")

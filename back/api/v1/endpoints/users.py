@@ -1,7 +1,12 @@
-from fastapi import APIRouter
+from fastapi import APIRouter, Depends
+from sqlalchemy.orm import Session
+from db.session import get_db
+from schemas import user
+from crud import crud_user
 import os
 
 router = APIRouter()
+
 
 @router.get('/test')
 async def user_test():
@@ -9,3 +14,11 @@ async def user_test():
     print(f"Hello {name} from Python")
     print('user_test')
     return {"data": name}
+
+
+@router.get('/')
+async def user_get(db: Session = Depends(get_db)):
+    print(111)
+    aa = crud_user.get_user(db)
+    print(aa)
+    return True
