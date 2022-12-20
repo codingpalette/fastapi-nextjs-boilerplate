@@ -2,13 +2,14 @@ import './globals.css';
 import {headers} from "next/headers";
 import ReactQueryWrapper from "../components/wrapper/ReactQueryWrapper";
 import DefaultWrapper from "../components/wrapper/DefaultWrapper";
+import {backUrl} from "../config/config";
 
 const fetchData = async () => {
   const headersInstance = headers()
   const authorization: any = headersInstance.get('authorization')
   const Cookie: any = headersInstance.get('Cookie')
   const res = await fetch(
-    'http://127.0.0.1:8000/api/v1/users/test2', {
+    `${backUrl}/api/v1/users/test2`, {
       headers: { authorization, Cookie },
       cache: 'no-store'
     })
