@@ -12,6 +12,11 @@ import os, bcrypt, datetime
 router = APIRouter()
 
 
+@router.get('/me', summary="내 정보 가져오기")
+async def user_me(request: Request):
+    return JSONResponse(status_code=200, content={"result": "success", "message": "인증 성공", "data": request.state.user})
+
+
 @router.get('/test')
 async def user_test():
     name = os.getenv("MY_NAME", "홍길동")
