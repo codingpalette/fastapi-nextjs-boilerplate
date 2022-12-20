@@ -8,7 +8,7 @@ import {
   List,
   ListItem,
   ListItemButton,
-  ListItemIcon, ListItemText,
+  ListItemIcon, ListItemText, Menu, MenuItem,
   Toolbar,
   Typography
 } from "@mui/material";
@@ -19,24 +19,27 @@ import {AccountCircle} from "@mui/icons-material";
 import MailIcon from '@mui/icons-material/Mail';
 
 const Header = () => {
+  // 왼쪽 사이드바 상태값
   const [leftSideState, setLeftSideState] = useState(false)
+  // 왼쪽 사이드바 열기 이벤트
   const leftSideOpen = () => {
     setLeftSideState(true)
   }
-
+  // 왼쪽 사이트바 닫기 이벤트
   const leftSideClose = () => {
     setLeftSideState(false)
   }
 
-
-  const navItems = ['Home', 'About', 'Contact'];
-
-  const [mobileOpen, setMobileOpen] = useState(false);
-
-  const handleDrawerToggle = () => {
-    setMobileOpen((prevState) => !prevState);
-  };
-
+  // 유저 네비 상태 값
+  const [anchorElNav, setAnchorElNav] = useState<null | HTMLElement>(null);
+  // 유저 네비 열기 이벤트
+  const anchorElNavOpen = (event: React.MouseEvent<HTMLElement>) => {
+    setAnchorElNav(event.currentTarget);
+  }
+  // 유저 네비 닫기 이벤트
+  const anchorElNavClose = (event: React.MouseEvent<HTMLElement>) => {
+    setAnchorElNav(null);
+  }
 
   return(
     <>
@@ -56,11 +59,31 @@ const Header = () => {
               aria-label="account of current user"
               aria-controls="menu-appbar"
               aria-haspopup="true"
-              // onClick={handleMenu}
+              onClick={anchorElNavOpen}
               color="inherit"
             >
               <AccountCircle />
             </IconButton>
+            <Menu
+              id="menu-appbar"
+              anchorEl={anchorElNav}
+              anchorOrigin={{
+                vertical: 'bottom',
+                horizontal: 'left',
+              }}
+              keepMounted
+              transformOrigin={{
+                vertical: 'top',
+                horizontal: 'left',
+              }}
+              open={Boolean(anchorElNav)}
+              onClose={anchorElNavClose}
+            >
+              <MenuItem  onClick={anchorElNavClose}>
+                <Typography textAlign="center">test</Typography>
+              </MenuItem>
+            </Menu>
+
           </Box>
         </Toolbar>
       </AppBar>
