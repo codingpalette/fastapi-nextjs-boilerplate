@@ -1,6 +1,7 @@
 'use client';
 
 import {useState} from "react";
+import Link from 'next/link';
 import {
   AppBar,
   Drawer,
@@ -101,12 +102,24 @@ const Header = () => {
         >
           <List>
             <ListItem disablePadding>
-              <ListItemButton>
-                <ListItemIcon>
-                  <MailIcon />
-                </ListItemIcon>
-                <ListItemText primary="aaa" />
-              </ListItemButton>
+              <Link href="/" passHref legacyBehavior>
+                <ListItemButton component="a">
+                  <ListItemIcon>
+                    <MailIcon />
+                  </ListItemIcon>
+                  <ListItemText primary="home" />
+                </ListItemButton>
+              </Link>
+            </ListItem>
+            <ListItem disablePadding>
+              <Link href="/about" passHref legacyBehavior>
+                <ListItemButton component="a">
+                  <ListItemIcon>
+                    <MailIcon />
+                  </ListItemIcon>
+                  <ListItemText primary="aaa" />
+                </ListItemButton>
+              </Link>
             </ListItem>
           </List>
         </Box>
