@@ -44,6 +44,12 @@ const page = () => {
       const url = mode === 'login' ? '/api/v1/users/login' : '/api/v1/users/create'
       const res = await axios.post(url, data)
       console.log('res', res)
+      if (res.data.result === 'success') {
+        if (mode === 'create') {
+          alertOpen('회원가입에 성공 했습니다.', 'success')
+          setMode('login')
+        }
+      }
     } catch (e: any) {
       if (e.response.data) {
         console.log('e', e)
