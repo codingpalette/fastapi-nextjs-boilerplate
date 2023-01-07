@@ -11,7 +11,7 @@ import axios, {AxiosError} from "axios";
 const page = () => {
 
   // 로그인 또는 회원가입 모드 값
-  const [mode, setMode] = useState('login')
+  const [mode, setMode] = useState<'login' | 'create'>('login')
   // 모드 체인지 이벤트
   const modeChange = () => {
     setMode(mode === 'login' ? 'create' : 'login')
@@ -21,12 +21,19 @@ const page = () => {
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const LoginFormData = new FormData(event.currentTarget);
-    const data = {
+    let data: any = {
       user_login_id: LoginFormData.get('user_login_id'),
-      user_password: LoginFormData.get('user_password')
+      user_password: LoginFormData.get('user_password'),
+    }
+    if (mode === 'create') {
+      data.user_nickname = LoginFormData.get('user_nickname')
     }
     if (!data.user_login_id || data.user_login_id === '') {
       alertOpen('아이디를 입력해 주세요.', 'error')
+      return
+    }
+    if (mode === 'create' && (!data.user_nickname || data.user_nickname === '')) {
+      alertOpen('닉네임을 입력해 주세요.', 'error')
       return
     }
     if (!data.user_password || data.user_password === '') {
@@ -39,6 +46,7 @@ const page = () => {
       console.log('res', res)
     } catch (e: any) {
       if (e.response.data) {
+        console.log('e', e)
         alertOpen(e.response.data.message, 'error')
       } else {
         alertOpen('에러가 발생 했습니다.', 'error')
@@ -109,6 +117,19 @@ const page = () => {
                 // autoComplete="email"
                 autoFocus
               />
+              {mode === 'create' && (
+                <>
+                  <TextField
+                    margin="normal"
+                    required
+                    fullWidth
+                    id="user_nickname"
+                    label="닉네임"
+                    name="user_nickname"
+                    // autoComplete="email"
+                  />
+                </>
+              )}
               <TextField
                 margin="normal"
                 required

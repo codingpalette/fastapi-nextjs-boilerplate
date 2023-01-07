@@ -9,7 +9,7 @@ const fetchData = async () => {
   const authorization: any = headersInstance.get('authorization')
   const Cookie: any = headersInstance.get('Cookie')
   const res = await fetch(
-    `${backUrl}/api/v1/users/test2`, {
+    `${backUrl}/api/v1/users/me`, {
       headers: { authorization, Cookie },
       cache: 'no-store'
     })
@@ -20,7 +20,6 @@ const fetchData = async () => {
 export default async function RootLayout({children,}: { children: React.ReactNode }) {
 
   const data = await fetchData()
-  console.log('data', data)
 
   return (
     <html>
