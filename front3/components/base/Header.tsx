@@ -13,6 +13,7 @@ const Header = () => {
   useEffect(() => {
     console.log('theme', theme)
   }, [theme])
+
   return(
     <>
       <HeaderBox>

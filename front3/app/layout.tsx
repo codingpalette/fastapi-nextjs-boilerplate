@@ -1,6 +1,7 @@
 import './globals.css';
 import Header from "../components/base/Header";
 import ThemeWrapper from "../components/wrapper/ThemeWrapper";
+import ReduxWrapper from "../components/wrapper/ReduxWrapper";
 
 export default function RootLayout({
   children,
@@ -11,10 +12,12 @@ export default function RootLayout({
     <html suppressHydrationWarning>
       <head />
       <body>
-        <ThemeWrapper>
-          <Header />
-          {children}
-        </ThemeWrapper>
+        <ReduxWrapper>
+          <ThemeWrapper>
+            <Header />
+            {children}
+          </ThemeWrapper>
+        </ReduxWrapper>
       </body>
     </html>
   )
