@@ -1,3 +1,4 @@
+from typing import Union, Optional
 from fastapi import APIRouter, Depends, HTTPException
 from fastapi.responses import JSONResponse
 from sqlalchemy.orm import Session
@@ -23,6 +24,15 @@ async def user_test():
     print(f"Hello {name} from Python")
     print('user_test')
     return {"data": name}
+
+
+@router.get('/query')
+async def user_query(text: Optional[str] = ''):
+    return JSONResponse(status_code=200, content={"result": "success", "data": text})
+
+@router.post('/add')
+async def user_add():
+    return True
 
 
 @router.get('/')
