@@ -1,4 +1,6 @@
 import './globals.css';
+import ReactQueryWrapper from "../components/wrapper/ReactQueryWrapper";
+import ThemeWrapper from "../components/wrapper/ThemeWrapper";
 
 export default function RootLayout({
   children,
@@ -6,9 +8,15 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html>
+    <html suppressHydrationWarning>
       <head />
-      <body>{children}</body>
+      <ReactQueryWrapper>
+          <body>
+            <ThemeWrapper>
+              {children}
+            </ThemeWrapper>
+          </body>
+      </ReactQueryWrapper>
     </html>
   )
 }
