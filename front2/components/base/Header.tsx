@@ -18,12 +18,12 @@ const Header = () => {
   `
   // 테마 속성 값
   const { theme, setTheme } = useTheme()
-  const [siteTheme, setSiteTheme] = useState<string | null>(null)
+  // const [siteTheme, setSiteTheme] = useState<string | null>(null)
 
 
-  useEffect(() => {
-    if (theme) setSiteTheme(theme)
-  }, [theme])
+  // useEffect(() => {
+  //   if (theme) setSiteTheme(theme)
+  // }, [theme])
 
 
 
@@ -47,19 +47,19 @@ const Header = () => {
           </Link>
         </div>
         <div className="right flex items-center">
-          {siteTheme && (
-            <>
-              {siteTheme === 'light' ? (
-                <Button circle className="mr-4" onClick={() => setTheme('dark')}>
-                  <MoonIcon className="w-4 h-4" />
-                </Button>
-              ) : (
-                <Button circle className="mr-4" onClick={() => setTheme('light')}>
-                  <SunIcon className="w-4 h-4" />
-                </Button>
-              )}
-            </>
-          )}
+          {/*{siteTheme && (*/}
+          {/*  <>*/}
+          {/*    {siteTheme === 'light' ? (*/}
+          {/*      <Button circle className="mr-4" onClick={() => setTheme('dark')}>*/}
+          {/*        <MoonIcon className="w-4 h-4" />*/}
+          {/*      </Button>*/}
+          {/*    ) : (*/}
+          {/*      <Button circle className="mr-4" onClick={() => setTheme('light')}>*/}
+          {/*        <SunIcon className="w-4 h-4" />*/}
+          {/*      </Button>*/}
+          {/*    )}*/}
+          {/*  </>*/}
+          {/*)}*/}
           <Button theme="primary">
             로그인
           </Button>

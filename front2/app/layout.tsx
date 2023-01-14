@@ -13,11 +13,11 @@ export default function RootLayout({
       <head />
       <ReactQueryWrapper>
           <body>
-          <EmotionWrapper>
-            <ThemeWrapper>
+          {/*<ThemeWrapper>*/}
+            <EmotionWrapper>
               {children}
-            </ThemeWrapper>
-          </EmotionWrapper>
+            </EmotionWrapper>
+          {/*</ThemeWrapper>*/}
           </body>
       </ReactQueryWrapper>
     </html>
