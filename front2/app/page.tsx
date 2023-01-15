@@ -2,10 +2,11 @@
 "use client";
 
 import {useGetUserMe, usePostUserLogin, usePostUserLogOut} from "../lib/apis/user";
-import {useEffect} from "react";
+import {useEffect, useState} from "react";
 import {useQueryClient} from "@tanstack/react-query";
 import MainContainer from "../components/containers/MainContainer";
 import Button from "../components/base/Button";
+import Modal from "../components/base/Modal";
 
 
 const Page = () => {
@@ -44,6 +45,14 @@ const Page = () => {
     }
   }
 
+  const [modalActive, setModalActive] = useState(false)
+  const modalTest = () => {
+    setModalActive(true)
+  }
+  const modalClose = () => {
+    setModalActive(false)
+  }
+
   return(
     <>
       <MainContainer>
@@ -55,8 +64,9 @@ const Page = () => {
           <button onClick={logoutTest}>로그아웃 테스트</button>
         </div>
         <div>
-          <button className="py-1 px-4 rounded ease-in-out duration-300 shadow text-slate-900 text-red-500">fsdfsd</button>
+          <Button onClick={modalTest}>모달 오픈 테스트</Button>
         </div>
+        <Modal open={modalActive} onCancel={modalClose} />
       </MainContainer>
     </>
 
