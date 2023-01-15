@@ -2,7 +2,9 @@
 "use client";
 
 import Button from "../../../components/base/Button";
-import Input from "../../../components/base/Input";
+import Input from "../../../components/base/input";
+
+const { TextArea } = Input;
 
 const page = () => {
   return(
@@ -15,6 +17,10 @@ const page = () => {
         <Input color="error" />
         <Input color="warning" />
         <Input color="success" />
+      </div>
+
+      <div className="p-4 flex items-center gap-4">
+        <TextArea />
       </div>
     </>
   )

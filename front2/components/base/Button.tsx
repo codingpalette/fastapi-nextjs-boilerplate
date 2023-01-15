@@ -45,7 +45,7 @@ const Button = ({
   }: ButtonProps) => {
 
   const style = css`
-    ${tw`inline-block px-4 rounded ease-in-out duration-300 shadow text-slate-900`};
+    ${tw`inline-block px-4 rounded ease-in-out duration-300 shadow text-slate-900 outline-0`};
     ${loading && tw`opacity-60 cursor-default`}
     ${block && tw`w-full`}
     ${circle && tw`rounded-full flex items-center justify-center`}
