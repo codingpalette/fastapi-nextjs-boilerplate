@@ -1,6 +1,6 @@
 
 import type { InputProps } from './Input';
-import InternalInput from './Input';
+import DefaultInput from './Input';
 import TextArea from "./TextArea";
 
 
@@ -8,7 +8,7 @@ type CompoundedComponent = React.ForwardRefExoticComponent<InputProps> & {
   TextArea: typeof TextArea;
 }
 
-const Input = InternalInput as CompoundedComponent
+const Input = DefaultInput as CompoundedComponent
 
 Input.TextArea = TextArea
 

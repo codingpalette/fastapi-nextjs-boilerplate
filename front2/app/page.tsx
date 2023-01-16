@@ -6,7 +6,7 @@ import {useEffect, useState} from "react";
 import {useQueryClient} from "@tanstack/react-query";
 import MainContainer from "../components/containers/MainContainer";
 import Button from "../components/base/Button";
-import Modal from "../components/base/Modal";
+import Modal from "../components/base/modal";
 
 
 const Page = () => {

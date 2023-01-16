@@ -9,7 +9,7 @@ export type ButtonProps = {
   /** 버튼 안의 내용 */
   children?: React.ReactNode;
   /** 클릭했을 때 호출할 함수 */
-  onClick?: (e?: React.MouseEvent<HTMLButtonElement>) => void;
+  onClick?: (e?: React.MouseEvent<HTMLButtonElement> | undefined)  => void;
   /** 버튼 타입 */
   htmlType?: 'button' | 'submit' | 'reset';
   /** 클래스 네임 설정 */
@@ -45,7 +45,7 @@ const Button = ({
   }: ButtonProps) => {
 
   const style = css`
-    ${tw`inline-block px-4 rounded ease-in-out duration-300 shadow text-slate-900 outline-0`};
+    ${tw`inline-block px-4 rounded ease-in-out duration-300 text-slate-900 outline-0`};
     ${loading && tw`opacity-60 cursor-default`}
     ${block && tw`w-full`}
     ${circle && tw`rounded-full flex items-center justify-center`}
