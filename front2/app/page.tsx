@@ -66,7 +66,15 @@ const Page = () => {
         <div>
           <Button onClick={modalTest}>모달 오픈 테스트</Button>
         </div>
-        <Modal open={modalActive} onCancel={modalClose} />
+        <Modal
+          title="모달!"
+          open={modalActive}
+          onCancel={modalClose}
+        >
+          <p>Some contents...</p>
+          <p>Some contents...</p>
+          <p>Some contents...</p>
+        </Modal>
       </MainContainer>
     </>
 

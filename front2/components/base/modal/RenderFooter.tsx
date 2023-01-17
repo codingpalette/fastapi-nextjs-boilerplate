@@ -17,7 +17,7 @@ const RenderFooter = ({ onCancel, onOk, footer }: RenderFooterProps) => {
 
   if (!footer) {
     return (
-      <div className="modal_footer mt-8 flex justify-end gap-2">
+      <div className="modal_footer mt-4 flex justify-end gap-2">
         <Button onClick={onCancel}>닫기</Button>
         <Button theme="primary" onClick={onOk}>열기</Button>
       </div>
