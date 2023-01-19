@@ -5,6 +5,7 @@ import tw from 'twin.macro';
 import {useEffect, useState} from "react";
 import RenderFooter from "./RenderFooter";
 import { XMarkIcon } from '@heroicons/react/24/solid'
+import useKeyEscClose from "../../../hooks/useKeyEscClose";
 
 export interface ModalProps {
   /** 모달 열기 상태 값 */
@@ -23,9 +24,30 @@ export interface ModalProps {
   title?: string;
   /** 모달 안의 내용 */
   children?: React.ReactNode;
+  /** 백그라운드 클릭시 모달 닫기 여부 */
+  mask?: boolean;
+  /** ok 버튼 텍스트 */
+  okText?: string;
+  /** esc로 닫기 여부 */
+  keyboard?: boolean;
+  /** 모달 중앙 여부 */
+  modalCenter?: boolean;
 }
 
-const Modal = ({open, onCancel, onOk, className, width = 550, footer, title, children}: ModalProps) => {
+const Modal = ({
+  open,
+  onCancel,
+  onOk,
+  className,
+  width = 550,
+  footer,
+  title,
+  children,
+  mask = true,
+  okText = '확인',
+  keyboard = true,
+  modalCenter = false,
+}: ModalProps) => {
   // 모달 상태 값
   const [closed, setClosed] = useState(true);
 
@@ -70,10 +92,19 @@ const Modal = ({open, onCancel, onOk, className, width = 550, footer, title, chi
       `
       )} 
     }
-   
-    .modal_content {
+    
+    .modal_container{
       max-width: calc(100vw - 32px);
       width: ${width}px;
+      ${modalCenter && `
+        display: flex;
+        align-items: center;
+        min-height: calc(100% - 4rem);
+      `}
+    }
+   
+    .modal_content {
+     
       ${open ? (
               `
         animation: popInFromBottom 0.2s forwards ease-in-out;
@@ -137,45 +168,44 @@ const Modal = ({open, onCancel, onOk, className, width = 550, footer, title, chi
     }
   `
 
+  // esc 버튼 누를시 모달 닫기
   const handleKeyPress = () => {
-    onCancel()
+    if (keyboard) {
+      onCancel()
+    }
   }
+  useKeyEscClose(handleKeyPress)
 
-  useEffect(() => {
-    const escKeyModalClose = (e: any) => {
-      if (e.keyCode === 27 && open) {
-        handleKeyPress();
-      }
-    };
-    window.addEventListener("keydown", escKeyModalClose);
-    return () => window.removeEventListener("keydown", escKeyModalClose);
-  }, [open]);
+
 
 
   if (!open && closed) return null;
 
   return(
     <div
-      className={`${className && className} fixed left-0 top-0 w-full h-full` }
+      className={`${className && className} fixed left-0 top-0 w-full h-full overflow-auto` }
       css={[style]}
     >
       <div
-        onClick={onCancel}
-        className="modal_back absolute z-10 left-0 top-0 w-full h-full bg-black"
+        onClick={mask ? onCancel : undefined}
+        className="modal_back fixed z-10 left-0 top-0 w-full h-full bg-black"
       ></div>
-      <div className="modal_content relative z-20 mx-auto my-8 bg-white rounded-lg p-4" >
-        <button type="button" onClick={onCancel} className="close_btn text-gray-900 opacity-60 hover:opacity-100">
-          <XMarkIcon className="w-5 h-5" />
-        </button>
-        <div className="modal_header font-semibold mb-4">
-          <div className="modal_title">
-            {title}
+      <div className="modal_container relative z-20 my-8 mx-auto">
+        <div className="modal_content bg-white rounded-lg p-4 w-full">
+          <button type="button" onClick={onCancel} className="close_btn text-gray-900 opacity-60 hover:opacity-100">
+            <XMarkIcon className="w-5 h-5" />
+          </button>
+          <div className="modal_header font-semibold mb-4">
+            <div className="modal_title">
+              {title}
+            </div>
           </div>
+          <div className="modal_body">
+            {children}
+          </div>
+          <RenderFooter onCancel={onCancel} onOk={onOk} footer={footer} okText={okText} />
         </div>
-        <div className="modal_body">
-          {children}
-        </div>
-        <RenderFooter onCancel={onCancel} onOk={onOk} footer={footer} />
+
       </div>
     </div>
   )

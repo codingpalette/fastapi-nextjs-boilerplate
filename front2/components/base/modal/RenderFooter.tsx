@@ -11,15 +11,17 @@ export interface RenderFooterProps {
   onOk?: (e?: React.MouseEvent<HTMLButtonElement>) => void;
   /** footer 랜더링 설정 */
   footer?: React.ReactNode;
+  /** ok 버튼 텍스트 */
+  okText?: string;
 }
 
-const RenderFooter = ({ onCancel, onOk, footer }: RenderFooterProps) => {
+const RenderFooter = ({ onCancel, onOk, footer, okText }: RenderFooterProps) => {
 
   if (!footer) {
     return (
       <div className="modal_footer mt-4 flex justify-end gap-2">
         <Button onClick={onCancel}>닫기</Button>
-        <Button theme="primary" onClick={onOk}>열기</Button>
+        <Button theme="primary" onClick={onOk}>{okText}</Button>
       </div>
     )
   }
