@@ -18,6 +18,10 @@ export type InputProps = {
   /** 클래스 네임 설정 */
   className?: string;
   placeholder?: string;
+  /** 아이디 */
+  id?: string;
+  /** 네임 */
+  name?: string;
 }
 const Input = ({
     value,
@@ -26,7 +30,9 @@ const Input = ({
     htmlType = 'text',
     color = 'primary',
     className = '',
-    placeholder
+    placeholder,
+    id,
+    name
   }: InputProps) => {
 
   const style = css`
@@ -65,6 +71,8 @@ const Input = ({
 
   return(
     <input
+      id={id}
+      name={name}
       value={value}
       onChange={onChange}
       type={htmlType}
