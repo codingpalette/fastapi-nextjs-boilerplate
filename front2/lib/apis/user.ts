@@ -7,9 +7,13 @@ import fetcher from "../fetcher";
 /**
  * 사용자 확인 api
  * */
-export const useGetUserMe = () => {
+export const useGetUserMe = (userData?: any) => {
   // Queries
-  const {data, isLoading, isError, error} = useQuery({ queryKey: ['user_me'], queryFn: () => fetcher('/api/v1/users/me') })
+  const {data, isLoading, isError, error} = useQuery({
+    queryKey: ['user_me'],
+    queryFn: () => fetcher('/api/v1/users/me'),
+    initialData: userData
+  })
   return {
     data,
     isLoading,
