@@ -15,10 +15,18 @@ export interface GroupProps{
 }
 
 const Group = ({name, label, className = '', children}: GroupProps) => {
+
+  const style = css`
+    &:not(:last-of-type) {
+      margin-bottom: 1rem;
+    }
+  `
+
   return(
     <>
       <div
         className={`${className && className} flex flex-col gap-2`}
+        css={[style]}
       >
         <label htmlFor={name} className="text-sm text-gray-600">{label}</label>
         {children}

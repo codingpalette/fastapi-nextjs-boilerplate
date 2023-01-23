@@ -28,6 +28,8 @@ export type ButtonProps = {
   block?: boolean;
   /** 원 모양 설정 */
   circle?: boolean;
+  /** 버튼 아이디 */
+  btnId?: string;
 }
 
 const Button = ({
@@ -41,7 +43,8 @@ const Button = ({
     color,
     loading,
     block,
-    circle
+    circle,
+    btnId,
   }: ButtonProps) => {
 
   const style = css`
@@ -116,6 +119,7 @@ const Button = ({
         className={`${className && className}` }
         type={htmlType}
         disabled={disabled || loading}
+        id={btnId}
       >
         {loading && (
           <span>

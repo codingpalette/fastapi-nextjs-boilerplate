@@ -20,6 +20,8 @@ export interface ModalProps {
   width?: number;
   /** footer 랜더링 설정 */
   footer?: React.ReactNode;
+  /** footer 렌더링 여부 */
+  footerRender?: boolean
   /** 모달 타이틀 */
   title?: string;
   /** 모달 안의 내용 */
@@ -41,6 +43,7 @@ const Modal = ({
   className,
   width = 550,
   footer,
+  footerRender = true,
   title,
   children,
   mask = true,
@@ -203,7 +206,9 @@ const Modal = ({
           <div className="modal_body">
             {children}
           </div>
-          <RenderFooter onCancel={onCancel} onOk={onOk} footer={footer} okText={okText} />
+          {footerRender && (
+            <RenderFooter onCancel={onCancel} onOk={onOk} footer={footer} okText={okText} />
+          )}
         </div>
 
       </div>

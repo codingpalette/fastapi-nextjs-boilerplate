@@ -8,7 +8,7 @@ export type InputProps = {
   /** 인풋 값 */
   value?: string;
   /** 인풋 체인지 이벤트 */
-  onChange?: (e?: React.FormEvent<HTMLInputElement>) => void;
+  onChange?: React.ChangeEventHandler;
   /** 인풋 크기 설정 */
   size?: 'large' | 'middle' | 'small';
   /** 인풋 타입 */
@@ -22,6 +22,8 @@ export type InputProps = {
   id?: string;
   /** 네임 */
   name?: string;
+  /** 최대 길이 값 */
+  maxLength?: number
 }
 const Input = ({
     value,
@@ -32,7 +34,8 @@ const Input = ({
     className = '',
     placeholder,
     id,
-    name
+    name,
+    maxLength
   }: InputProps) => {
 
   const style = css`
@@ -79,6 +82,7 @@ const Input = ({
       css={[style, sizes[size], colors[color]]}
       className={`${className && className}` }
       placeholder={placeholder}
+      maxLength={maxLength}
     />
   )
 }

@@ -7,6 +7,7 @@ import {useQueryClient} from "@tanstack/react-query";
 import MainContainer from "../components/containers/MainContainer";
 import Button from "../components/base/Button";
 import Modal from "../components/base/modal";
+import Input from "../components/base/input";
 
 
 const Page = () => {
@@ -66,14 +67,23 @@ const Page = () => {
         <div>
           <Button onClick={modalTest}>모달 오픈 테스트</Button>
         </div>
+        <div className="p-4">
+          <form action="">
+            <Input.Group
+              name="id"
+              label="아이디"
+            >
+              <Input name="id" id="id" />
+            </Input.Group>
+
+          </form>
+        </div>
         <Modal
           title="모달!"
           open={modalActive}
           onCancel={modalClose}
         >
-          <p>Some contents...</p>
-          <p>Some contents...</p>
-          <p>Some contents...</p>
+          <p>content....</p>
         </Modal>
       </MainContainer>
     </>
