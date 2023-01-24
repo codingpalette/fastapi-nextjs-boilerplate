@@ -5,17 +5,19 @@ import tw from 'twin.macro';
 import Button from "./Button";
 import Link from "next/link";
 import { Bars3Icon } from '@heroicons/react/24/solid'
-import {SunIcon, MoonIcon} from '@heroicons/react/24/outline'
 import {useTheme} from "next-themes";
 import {useEffect, useState} from "react";
 import Modal from "./modal";
 import Input from "./input";
 import useInput from "../../hooks/useInput";
 import {ErrorMessageOpen, SuccessMessageOpen} from "../../hooks/useToast";
-import {usePostUserLogin} from "../../lib/apis/user";
+import {useGetUserMe, usePostUserLogin} from "../../lib/apis/user";
+import Dropdown from "./Dropdown";
 
 
 const Header = () => {
+  /** 유저 데이터 */
+  const {data: userMe} = useGetUserMe();
 
   // header 스타일 지정
   const style = css`
@@ -29,6 +31,32 @@ const Header = () => {
   // useEffect(() => {
   //   if (theme) setSiteTheme(theme)
   // }, [theme])
+
+  const [userMenuActive, setUserMenuActive] = useState(false)
+  const userMenuOpen = () => {
+    setUserMenuActive(true)
+  }
+  const userMenuClose = () => {
+    setUserMenuActive(false)
+  }
+  const userMenuToggle = () => {
+    setUserMenuActive(!userMenuActive)
+  }
+
+  const items = [
+    {
+      label: <a href="https://www.antgroup.com">1st menu item</a>,
+      key: '0',
+    },
+    {
+      label: <a href="https://www.aliyun.com">2nd menu item</a>,
+      key: '1',
+    },
+    {
+      label: '3rd menu item',
+      key: '3',
+    },
+  ];
 
   const [userLoginId, onChangeUserLoginId] = useInput('')
   const [userPassword, onChangeUserPassword] = useInput('')
@@ -54,7 +82,6 @@ const Header = () => {
       ErrorMessageOpen('비밀번호를 입력해 주세요.');
       return;
     }
-    console.log('start')
     try {
       const post_data = {
         user_login_id: userLoginId,
@@ -80,7 +107,7 @@ const Header = () => {
     <>
       <header
         css={[style]}
-        className="px-4 flex items-center justify-between"
+        className="px-4 flex items-center justify-between shadow"
       >
         <div className="left flex items-center">
           <Button circle className="mr-4">
@@ -109,9 +136,22 @@ const Header = () => {
           {/*    )}*/}
           {/*  </>*/}
           {/*)}*/}
-          <Button theme="primary" onClick={signModalOpen}>
-            로그인
-          </Button>
+          {userMe?.result === 'success' ? (
+            <div className="relative">
+              {/*<Button theme="primary" onClick={signModalOpen}>*/}
+              {/*  로그아웃*/}
+              {/*</Button>*/}
+              <Dropdown open={userMenuActive} onCancel={userMenuClose} items={items} placement="right">
+                <Button onClick={userMenuToggle}>
+                  열기
+                </Button>
+              </Dropdown>
+            </div>
+          ) : (
+            <Button theme="primary" onClick={signModalOpen}>
+              로그인
+            </Button>
+          )}
         </div>
         <Modal
           open={signModalActive}
