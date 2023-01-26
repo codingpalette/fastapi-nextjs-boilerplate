@@ -4,20 +4,23 @@ import {css} from "@emotion/react";
 import tw from 'twin.macro';
 import Button from "./Button";
 import Link from "next/link";
-import { Bars3Icon } from '@heroicons/react/24/solid'
+import { Bars3Icon, UserCircleIcon } from '@heroicons/react/24/solid'
 import {useTheme} from "next-themes";
 import {useEffect, useState} from "react";
 import Modal from "./modal";
 import Input from "./input";
 import useInput from "../../hooks/useInput";
 import {ErrorMessageOpen, SuccessMessageOpen} from "../../hooks/useToast";
-import {useGetUserMe, usePostUserLogin} from "../../lib/apis/user";
+import {useGetUserMe, usePostUserLogin, usePostUserLogOut} from "../../lib/apis/user";
 import Dropdown from "./Dropdown";
+import {useQueryClient} from "@tanstack/react-query";
 
 
 const Header = () => {
+  const queryClient = useQueryClient()
+
   /** 유저 데이터 */
-  const {data: userMe} = useGetUserMe();
+  const {data: userMe, error} = useGetUserMe();
 
   // header 스타일 지정
   const style = css`
@@ -43,18 +46,27 @@ const Header = () => {
     setUserMenuActive(!userMenuActive)
   }
 
+  /** 로그아웃 이벤트 */
+  const onClickLogOut = async () => {
+    try {
+      const res = await usePostUserLogOut()
+      if (res.data.result === 'success') {
+        queryClient.clear();
+      }
+      // await queryClient.invalidateQueries({ queryKey: ['user_me'] })
+    } catch (e: any) {
+      if (e.response.data) {
+        ErrorMessageOpen(e.response.data.message)
+      } else {
+        ErrorMessageOpen('에러가 발생 하였습니다.')
+      }
+    }
+  }
+
   const items = [
     {
-      label: <a href="https://www.antgroup.com">1st menu item</a>,
+      label: <span onClick={onClickLogOut} className="cursor-pointer block">로그아웃</span>,
       key: '0',
-    },
-    {
-      label: <a href="https://www.aliyun.com">2nd menu item</a>,
-      key: '1',
-    },
-    {
-      label: '3rd menu item',
-      key: '3',
     },
   ];
 
@@ -90,6 +102,8 @@ const Header = () => {
       const res = await usePostUserLogin(post_data)
       if (res.data.result === 'success') {
         SuccessMessageOpen('로그인 성공')
+        signModalClose()
+        await queryClient.invalidateQueries({ queryKey: ['user_me'] })
       }
     } catch (e: any) {
       if (e.response.data) {
@@ -100,6 +114,7 @@ const Header = () => {
     }
 
   }
+
 
 
 
@@ -142,9 +157,10 @@ const Header = () => {
               {/*  로그아웃*/}
               {/*</Button>*/}
               <Dropdown open={userMenuActive} onCancel={userMenuClose} items={items} placement="right">
-                <Button onClick={userMenuToggle}>
-                  열기
+                <Button circle className="" onClick={userMenuToggle}>
+                  <UserCircleIcon className="w-5 h-5" />
                 </Button>
+
               </Dropdown>
             </div>
           ) : (
