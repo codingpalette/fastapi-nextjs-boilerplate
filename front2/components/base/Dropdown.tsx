@@ -18,6 +18,8 @@ export interface DropdownProps {
   }[]
   /** 드롭다운 위치 */
   placement?: 'left' | 'right'
+  /** 드롭다운 크기 */
+  width?: number
 }
 
 const Dropdown = ({
@@ -25,12 +27,14 @@ const Dropdown = ({
   open,
   onCancel,
   items,
-  placement = 'left'
+  placement = 'left',
+  width
 }: DropdownProps) => {
 
   const style = css`
     top: 40px;
     padding: 4px;
+    width: ${width ? `${width}px` : 'auto'};
   `;
 
   const placements = {
