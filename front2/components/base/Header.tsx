@@ -11,7 +11,7 @@ import Modal from "./modal";
 import Input from "./input";
 import useInput from "../../hooks/useInput";
 import {ErrorMessageOpen, SuccessMessageOpen} from "../../hooks/useToast";
-import {useGetUserMe, usePostUserLogin, usePostUserLogOut} from "../../lib/apis/user";
+import {useGetUserMe, usePostUserCreate, usePostUserLogin, usePostUserLogOut} from "../../lib/apis/user";
 import Dropdown from "./Dropdown";
 import {useQueryClient} from "@tanstack/react-query";
 
@@ -70,11 +70,20 @@ const Header = () => {
     },
   ];
 
+  /** 로그인, 회원가입 인풋 값 */
   const [userLoginId, onChangeUserLoginId] = useInput('')
   const [userPassword, onChangeUserPassword] = useInput('')
+  const [passwordCheck, onChangePasswordCheck] = useInput('')
+  const [userNickname, onChangeUserNickname] = useInput('')
 
   /** 로그인, 회원가입 모달 상태값 */
   const [signModalActive, setSignModalActive] = useState(false)
+  /** 로그인, 회원가입 모드 */
+  const [signMode, setSignMode] = useState<'login' | 'create'>('login')
+  /** 모드 체인지 */
+  const signModeChange = () => {
+    setSignMode(signMode === 'login' ? 'create' : 'login')
+  }
   /** 로그인, 회원가입 모달 열기 이벤트 */
   const signModalOpen = () => {
     setSignModalActive(true)
@@ -94,16 +103,43 @@ const Header = () => {
       ErrorMessageOpen('비밀번호를 입력해 주세요.');
       return;
     }
+    if (signMode === 'create') {
+      if (passwordCheck === '') {
+        ErrorMessageOpen('비밀번호 확인을 입력해 주세요.')
+        return;
+      }
+      if (userPassword !== passwordCheck) {
+        ErrorMessageOpen('비밀번호 확인을 올바르게 입력해 주세요.')
+        return
+      }
+      if (userNickname === '') {
+        ErrorMessageOpen('닉네임을 입력해 주세요.')
+        return
+      }
+    }
+
     try {
-      const post_data = {
+      const post_data:any = {
         user_login_id: userLoginId,
         user_password: userPassword
       }
-      const res = await usePostUserLogin(post_data)
+      if (signMode === 'create') {
+        post_data.user_nickname = userNickname
+      }
+      let res;
+      if (signMode === "login") {
+        res = await usePostUserLogin(post_data)
+      } else {
+        res = await usePostUserCreate(post_data)
+      }
       if (res.data.result === 'success') {
-        SuccessMessageOpen('로그인 성공')
-        signModalClose()
-        await queryClient.invalidateQueries({ queryKey: ['user_me'] })
+        if (signMode === 'login') {
+          SuccessMessageOpen('로그인 성공')
+          signModalClose()
+          await queryClient.invalidateQueries({ queryKey: ['user_me'] })
+        } else {
+          SuccessMessageOpen('회원가입 성공')
+        }
       }
     } catch (e: any) {
       if (e.response.data) {
@@ -172,7 +208,7 @@ const Header = () => {
         <Modal
           open={signModalActive}
           onCancel={signModalClose}
-          title="로그인"
+          title={signMode === 'login' ? '로그인' : '회원가입'}
           footerRender={false}
         >
           <form id="joinForm" onSubmit={signSubmit}>
@@ -195,6 +231,33 @@ const Header = () => {
                 onChange={onChangeUserPassword}
               />
             </Input.Group>
+            {signMode === 'create' && (
+              <>
+                <Input.Group label="비밀번호 확인" name="password_check">
+                  <Input
+                    id="password_check"
+                    name="password_check"
+                    htmlType="password"
+                    maxLength={30}
+                    value={passwordCheck}
+                    onChange={onChangePasswordCheck}
+                  />
+                </Input.Group>
+                <Input.Group label="닉네임" name="user_nickname">
+                  <Input
+                    id="user_nickname"
+                    name="user_nickname"
+                    htmlType="text"
+                    maxLength={30}
+                    value={userNickname}
+                    onChange={onChangeUserNickname}
+                  />
+                </Input.Group>
+              </>
+            )}
+            <div className="">
+              <Button theme="text" onClick={signModeChange}>{signMode === 'login' ? '회원가입' : '로그인'}</Button>
+            </div>
             <div className=" flex justify-end gap-2">
               <Button onClick={signModalClose}>닫기</Button>
               <Button theme="primary" htmlType="submit">확인</Button>

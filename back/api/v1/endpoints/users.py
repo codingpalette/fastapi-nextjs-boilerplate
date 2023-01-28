@@ -54,7 +54,7 @@ async def user_create(post_data: user.UserCreate, db: Session = Depends(get_db))
     user_info = crud_user.user_find_one(post_data.user_login_id, db)
     # 유저가 있다고 하면 회원가입 불가
     if user_info:
-        raise HTTPException(status_code=401, detail={"result": "fail", "message": "이미 사용중인 아이디 입니다."})
+        return JSONResponse(status_code=401, content={"result": "fail", "message": "이미 사용중인 아이디 입니다."})
 
     # 비밀번호 암호화
     hashed_password = bcrypt.hashpw(post_data.user_password.encode('utf-8'), bcrypt.gensalt())
@@ -65,7 +65,7 @@ async def user_create(post_data: user.UserCreate, db: Session = Depends(get_db))
     if save_user:
         return JSONResponse(status_code=200, content={"result": "success", "message": "회원가입에 성공 했습니다"})
     else:
-        raise HTTPException(status_code=401, detail={"result": "fail", "message": "회원가입에 실패 했습니다."})
+        return JSONResponse(status_code=401, content={"result": "fail", "message": "회원가입에 실패 했습니다."})
 
 @router.post('/login', summary="유저 로그인")
 async def user_login(post_data: user.UserLogin, db: Session = Depends(get_db)):
@@ -107,7 +107,7 @@ async def user_login(post_data: user.UserLogin, db: Session = Depends(get_db)):
         )
         return response
     else:
-        raise HTTPException(status_code=401, detail={"result": "fail", "message": "로그인에 실패했습니다."})
+        return JSONResponse(status_code=401, content={"result": "fail", "message": "로그인에 실패했습니다."})
 
 
 @router.post('/logout', summary="로그아웃")
