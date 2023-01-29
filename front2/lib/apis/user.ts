@@ -7,7 +7,7 @@ import fetcher from "../fetcher";
 /**
  * 사용자 확인 api
  * */
-export const useGetUserMe = (userData?: any) => {
+export const UseApiGetUserMe = (userData?: any) => {
   // Queries
   const {data, isLoading, isError, error} = useQuery({
     queryKey: ['user_me'],
@@ -25,23 +25,23 @@ export const useGetUserMe = (userData?: any) => {
 /**
  * 사용자 로그인 api
  * */
-export const usePostUserLogin = async (post_data: UserLogin) => {
+export const apiPostUserLogin = async (post_data: UserLogin) => {
   return await apiCreator.post('/api/v1/users/login', post_data)
 }
 
 /**
  * 사용자 로그아웃 api
  * */
-export const usePostUserLogOut = async () => {
+export const apiPostUserLogOut = async () => {
   return await apiCreator.post('/api/v1/users/logout')
 }
 
 /** 사용자 회원가입 api */
-export const usePostUserCreate = async (post_data: UserCreate) => {
+export const apiPostUserCreate = async (post_data: UserCreate) => {
   return await apiCreator.post('/api/v1/users/create', post_data)
 }
 
 /** 사용자 토큰 갱신 api */
-export const useGetUserTokenRefresh = async () => {
+export const apiGetUserTokenRefresh = async () => {
   return await apiCreator.get('/api/v1/users/token_refresh')
 }

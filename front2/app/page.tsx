@@ -1,7 +1,7 @@
 /** @jsxImportSource @emotion/react */
 "use client";
 
-import {useGetUserMe, usePostUserLogin, usePostUserLogOut} from "../lib/apis/user";
+import {UseApiGetUserMe, apiPostUserLogin, apiPostUserLogOut} from "../lib/apis/user";
 import {useEffect, useState} from "react";
 import {useQueryClient} from "@tanstack/react-query";
 import MainContainer from "../components/containers/MainContainer";
@@ -13,7 +13,7 @@ import Input from "../components/base/input";
 const Page = () => {
   const queryClient = useQueryClient();
 
-  const {data: userMe} = useGetUserMe()
+  const {data: userMe} = UseApiGetUserMe()
 
   useEffect(() => {
     console.log('userMe', userMe)
@@ -21,7 +21,7 @@ const Page = () => {
 
   const loginTest = async () => {
     try {
-      const res = await usePostUserLogin({
+      const res = await apiPostUserLogin({
         user_login_id: 'string',
         user_password: 'string'
       })
@@ -38,7 +38,7 @@ const Page = () => {
 
   const logoutTest = async () => {
     try {
-      const res = await usePostUserLogOut()
+      const res = await apiPostUserLogOut()
       console.log('res', res)
       await queryClient.invalidateQueries(["user_me"]);
     } catch (e) {

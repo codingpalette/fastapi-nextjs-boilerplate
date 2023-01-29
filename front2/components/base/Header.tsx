@@ -11,7 +11,7 @@ import Modal from "./modal";
 import Input from "./input";
 import useInput from "../../hooks/useInput";
 import {ErrorMessageOpen, SuccessMessageOpen} from "../../hooks/useToast";
-import {useGetUserMe, usePostUserCreate, usePostUserLogin, usePostUserLogOut} from "../../lib/apis/user";
+import {UseApiGetUserMe, apiPostUserCreate, apiPostUserLogin, apiPostUserLogOut} from "../../lib/apis/user";
 import Dropdown from "./Dropdown";
 import {useQueryClient} from "@tanstack/react-query";
 
@@ -20,7 +20,7 @@ const Header = () => {
   const queryClient = useQueryClient()
 
   /** 유저 데이터 */
-  const {data: userMe, isError, error} = useGetUserMe();
+  const {data: userMe, isError, error} = UseApiGetUserMe();
 
   // header 스타일 지정
   const style = css`
@@ -49,7 +49,7 @@ const Header = () => {
   /** 로그아웃 이벤트 */
   const onClickLogOut = async () => {
     try {
-      const res = await usePostUserLogOut()
+      const res = await apiPostUserLogOut()
       if (res.data.result === 'success') {
         // queryClient.clear();
         await queryClient.invalidateQueries({ queryKey: ['user_me'] })
@@ -128,9 +128,9 @@ const Header = () => {
       }
       let res;
       if (signMode === "login") {
-        res = await usePostUserLogin(post_data)
+        res = await apiPostUserLogin(post_data)
       } else {
-        res = await usePostUserCreate(post_data)
+        res = await apiPostUserCreate(post_data)
       }
       if (res.data.result === 'success') {
         if (signMode === 'login') {
