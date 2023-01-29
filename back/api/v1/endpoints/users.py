@@ -18,36 +18,6 @@ async def user_me(request: Request):
     return JSONResponse(status_code=200, content={"result": "success", "message": "인증 성공", "data": request.state.user})
 
 
-@router.get('/test')
-async def user_test():
-    name = os.getenv("MY_NAME", "홍길동")
-    print(f"Hello {name} from Python")
-    print('user_test')
-    return {"data": name}
-
-
-@router.get('/query')
-async def user_query(text: Optional[str] = ''):
-    return JSONResponse(status_code=200, content={"result": "success", "data": text})
-
-@router.post('/add')
-async def user_add():
-    return True
-
-
-@router.get('/')
-async def user_get(db: Session = Depends(get_db)):
-    print(111)
-    aa = crud_user.get_user(db)
-    print(aa)
-    return True
-
-
-@router.get('/test2')
-async def user_test2():
-    return True
-
-
 @router.post('/create', summary="유저 생성")
 async def user_create(post_data: user.UserCreate, db: Session = Depends(get_db)):
     # 유저 체크
@@ -66,6 +36,7 @@ async def user_create(post_data: user.UserCreate, db: Session = Depends(get_db))
         return JSONResponse(status_code=200, content={"result": "success", "message": "회원가입에 성공 했습니다"})
     else:
         return JSONResponse(status_code=401, content={"result": "fail", "message": "회원가입에 실패 했습니다."})
+
 
 @router.post('/login', summary="유저 로그인")
 async def user_login(post_data: user.UserLogin, db: Session = Depends(get_db)):
@@ -121,3 +92,33 @@ async def user_logout(request: Request, db: Session = Depends(get_db)):
         return response
     else:
         return JSONResponse(status_code=401, content={"result": "fail", "message": "로그아웃에 실패했습니다"})
+
+
+@router.get('/token_refresh', summary="토큰 갱신")
+async def token_refresh(request: Request):
+    cookies = request.cookies
+    user_info = request.state.user
+    refresh_token = cookies.get("refresh_token")
+    # 리프레시 토큰이 유효한지 검사한다.
+    token_info = await token.token_check(refresh_token)
+    if not token_info:
+        content = {"result": "fail", "message": "인증 실패"}
+        response = JSONResponse(status_code=401, content=content)
+        response.delete_cookie("access_token")
+        response.delete_cookie("refresh_token")
+        return response
+
+    # 유효하다면 엑세스 토큰을 갱신시켜준다.
+    access_token = token.create_token("access_token", user_info)
+    access_token_time = datetime.datetime.utcnow() + datetime.timedelta(days=settings.ACCESS_TOKEN_TIME)
+    content = {"result": "success", "message": "토큰 갱신 성공"}
+    response = JSONResponse(content=content)
+
+    response.set_cookie(
+        key="access_token",
+        value=access_token,
+        secure=True,
+        httponly=True,
+        expires=access_token_time.strftime("%a, %d %b %Y %H:%M:%S GMT"),
+    )
+    return response

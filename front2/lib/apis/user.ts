@@ -2,7 +2,6 @@ import apiCreator from "../apiCreator";
 import {UserCreate, UserLogin} from "../types/user_type";
 import {useQuery, useMutation} from "@tanstack/react-query";
 import fetcher from "../fetcher";
-import exp from "constants";
 
 
 /**
@@ -40,4 +39,9 @@ export const usePostUserLogOut = async () => {
 /** 사용자 회원가입 api */
 export const usePostUserCreate = async (post_data: UserCreate) => {
   return await apiCreator.post('/api/v1/users/create', post_data)
+}
+
+/** 사용자 토큰 갱신 api */
+export const useGetUserTokenRefresh = async () => {
+  return await apiCreator.get('/api/v1/users/token_refresh')
 }
