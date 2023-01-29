@@ -20,7 +20,7 @@ const Header = () => {
   const queryClient = useQueryClient()
 
   /** 유저 데이터 */
-  const {data: userMe, error} = useGetUserMe();
+  const {data: userMe, isError, error} = useGetUserMe();
 
   // header 스타일 지정
   const style = css`
@@ -51,9 +51,9 @@ const Header = () => {
     try {
       const res = await usePostUserLogOut()
       if (res.data.result === 'success') {
-        queryClient.clear();
+        // queryClient.clear();
+        await queryClient.invalidateQueries({ queryKey: ['user_me'] })
       }
-      // await queryClient.invalidateQueries({ queryKey: ['user_me'] })
     } catch (e: any) {
       if (e.response.data) {
         ErrorMessageOpen(e.response.data.message)
@@ -187,7 +187,7 @@ const Header = () => {
           {/*    )}*/}
           {/*  </>*/}
           {/*)}*/}
-          {userMe?.result === 'success' ? (
+          {userMe?.result === 'success' && !isError ? (
             <div className="relative">
               {/*<Button theme="primary" onClick={signModalOpen}>*/}
               {/*  로그아웃*/}
