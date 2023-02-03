@@ -19,72 +19,13 @@ const Page = () => {
     console.log('userMe', userMe)
   }, [userMe])
 
-  const loginTest = async () => {
-    try {
-      const res = await apiPostUserLogin({
-        user_login_id: 'string',
-        user_password: 'string'
-      })
-      console.log(res)
-      await queryClient.invalidateQueries(["user_me"]);
 
-
-
-    } catch (e) {
-      console.error(e)
-    }
-
-  }
-
-  const logoutTest = async () => {
-    try {
-      const res = await apiPostUserLogOut()
-      console.log('res', res)
-      await queryClient.invalidateQueries(["user_me"]);
-    } catch (e) {
-      console.error(e)
-    }
-  }
-
-  const [modalActive, setModalActive] = useState(false)
-  const modalTest = () => {
-    setModalActive(true)
-  }
-  const modalClose = () => {
-    setModalActive(false)
-  }
 
   return(
     <>
       <MainContainer>
 
-        <div className="p-4">
-          <button onClick={loginTest}>로그인 테스트</button>
-        </div>
-        <div className="p-4">
-          <button onClick={logoutTest}>로그아웃 테스트</button>
-        </div>
-        <div>
-          <Button onClick={modalTest}>모달 오픈 테스트</Button>
-        </div>
-        <div className="p-4">
-          <form action="">
-            <Input.Group
-              name="id"
-              label="아이디"
-            >
-              <Input name="id" id="id" />
-            </Input.Group>
 
-          </form>
-        </div>
-        <Modal
-          title="모달!"
-          open={modalActive}
-          onCancel={modalClose}
-        >
-          <p>content....</p>
-        </Modal>
       </MainContainer>
     </>
 
