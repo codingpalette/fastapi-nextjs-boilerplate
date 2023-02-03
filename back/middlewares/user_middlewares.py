@@ -14,6 +14,7 @@ class UserMiddlewares:
             check_list = ['/api/v1/users/login', '/api/v1/user/create']
             if url in check_list:
                 token_info = await token.token_check(access_token)
+                print('token_info', token_info)
                 if token_info:
                     return JSONResponse(status_code=401, content={"result": "fail", "message": "로그아웃 후 가능합니다."})
 
