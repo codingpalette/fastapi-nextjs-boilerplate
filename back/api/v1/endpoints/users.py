@@ -67,6 +67,7 @@ async def user_login(post_data: user.UserLogin, db: Session = Depends(get_db)):
             value=access_token,
             secure=True,
             httponly=True,
+            domain='dev.codingpalette.com',
             expires=access_token_time.strftime("%a, %d %b %Y %H:%M:%S GMT"),
         )
         response.set_cookie(
@@ -74,6 +75,7 @@ async def user_login(post_data: user.UserLogin, db: Session = Depends(get_db)):
             value=refresh_token,
             secure=True,
             httponly=True,
+            domain='dev.codingpalette.com',
             expires=refresh_token_time.strftime("%a, %d %b %Y %H:%M:%S GMT"),
         )
         return response
