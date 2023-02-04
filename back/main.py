@@ -25,7 +25,7 @@ def create_app():
     origins = [
         'http://localhost:3000',
         'http://localhost:8000',
-        'https://port-0-fastapi-nextjs-boilerplate-front-ngsnp25lbs18e9i.gksl2.cloudtype.app'
+        'https://dev.codingpalette.com'
     ]
 
     not_logged_in_middleware = user_middlewares.not_logged_in

@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 
-axios.defaults.baseURL = process.env.NODE_ENV === "production" ? "https://port-0-fastapi-nextjs-boilerplate-ngsnp25lbs18e9i.gksl2.cloudtype.app" : "http://localhost:8000";
+axios.defaults.baseURL = process.env.NODE_ENV === "production" ? "https://api.codingpalette.com" : "http://localhost:8000";
 // axios.defaults.baseURL = 'http://localhost:8000';
 axios.defaults.timeout = 180000;
 axios.defaults.withCredentials = true;
