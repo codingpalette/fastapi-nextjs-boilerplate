@@ -81,15 +81,6 @@ async def user_login(post_data: user.UserLogin, db: Session = Depends(get_db)):
             expires=refresh_token_time.strftime("%a, %d %b %Y %H:%M:%S GMT"),
         )
 
-        response.set_cookie(
-            key="test",
-            value="test_value",
-            secure=True,
-            httponly=True,
-            domain='codingpalette.com',
-            samesite='none',
-            expires=refresh_token_time.strftime("%a, %d %b %Y %H:%M:%S GMT"),
-        )
         return response
     else:
         return JSONResponse(status_code=401, content={"result": "fail", "message": "로그인에 실패했습니다."})
@@ -101,8 +92,20 @@ async def user_logout(request: Request, db: Session = Depends(get_db)):
     if token_delete:
         content = {"result": "success", "message": "로그아웃 성공"}
         response = JSONResponse(content=content)
-        response.delete_cookie("access_token")
-        response.delete_cookie("refresh_token")
+        response.delete_cookie(
+            key="access_token",
+            secure=True,
+            httponly=True,
+            domain='codingpalette.com',
+            samesite='none'
+        )
+        response.delete_cookie(
+            key="refresh_token",
+            secure=True,
+            httponly=True,
+            domain='codingpalette.com',
+            samesite='none'
+        )
         return response
     else:
         return JSONResponse(status_code=401, content={"result": "fail", "message": "로그아웃에 실패했습니다"})
