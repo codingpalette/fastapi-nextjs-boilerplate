@@ -80,6 +80,16 @@ async def user_login(post_data: user.UserLogin, db: Session = Depends(get_db)):
             samesite='none',
             expires=refresh_token_time.strftime("%a, %d %b %Y %H:%M:%S GMT"),
         )
+
+        response.set_cookie(
+            key="test",
+            value="test_value",
+            secure=True,
+            httponly=True,
+            domain='codingpalette.com',
+            samesite='none',
+            expires=refresh_token_time.strftime("%a, %d %b %Y %H:%M:%S GMT"),
+        )
         return response
     else:
         return JSONResponse(status_code=401, content={"result": "fail", "message": "로그인에 실패했습니다."})
