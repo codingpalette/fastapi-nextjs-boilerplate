@@ -67,7 +67,7 @@ async def user_login(post_data: user.UserLogin, db: Session = Depends(get_db)):
             value=access_token,
             secure=True,
             httponly=True,
-            # domain='dev.codingpalette.com',
+            domain='dev.codingpalette.com',
             samesite='none',
             expires=access_token_time.strftime("%a, %d %b %Y %H:%M:%S GMT"),
         )
@@ -76,7 +76,7 @@ async def user_login(post_data: user.UserLogin, db: Session = Depends(get_db)):
             value=refresh_token,
             secure=True,
             httponly=True,
-            # domain='dev.codingpalette.com',
+            domain='dev.codingpalette.com',
             samesite='none',
             expires=refresh_token_time.strftime("%a, %d %b %Y %H:%M:%S GMT"),
         )
@@ -123,6 +123,7 @@ async def token_refresh(request: Request):
         value=access_token,
         secure=True,
         httponly=True,
+        domain='dev.codingpalette.com',
         samesite='none',
         expires=access_token_time.strftime("%a, %d %b %Y %H:%M:%S GMT"),
     )
