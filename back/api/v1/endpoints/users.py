@@ -67,7 +67,7 @@ async def user_login(post_data: user.UserLogin, db: Session = Depends(get_db)):
             value=access_token,
             secure=True,
             httponly=True,
-            domain='codingpalette.com',
+            domain=settings.COOKIE_DOMAIN,
             samesite='none',
             expires=access_token_time.strftime("%a, %d %b %Y %H:%M:%S GMT"),
         )
@@ -76,7 +76,7 @@ async def user_login(post_data: user.UserLogin, db: Session = Depends(get_db)):
             value=refresh_token,
             secure=True,
             httponly=True,
-            domain='codingpalette.com',
+            domain=settings.COOKIE_DOMAIN,
             samesite='none',
             expires=refresh_token_time.strftime("%a, %d %b %Y %H:%M:%S GMT"),
         )
@@ -96,14 +96,14 @@ async def user_logout(request: Request, db: Session = Depends(get_db)):
             key="access_token",
             secure=True,
             httponly=True,
-            domain='codingpalette.com',
+            domain=settings.COOKIE_DOMAIN,
             samesite='none'
         )
         response.delete_cookie(
             key="refresh_token",
             secure=True,
             httponly=True,
-            domain='codingpalette.com',
+            domain=settings.COOKIE_DOMAIN,
             samesite='none'
         )
         return response
@@ -136,7 +136,7 @@ async def token_refresh(request: Request):
         value=access_token,
         secure=True,
         httponly=True,
-        domain='codingpalette.com',
+        domain=settings.COOKIE_DOMAIN,
         samesite='none',
         expires=access_token_time.strftime("%a, %d %b %Y %H:%M:%S GMT"),
     )

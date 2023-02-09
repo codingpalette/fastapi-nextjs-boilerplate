@@ -14,7 +14,7 @@ const DefaultWrapper = ({ children, userData }: Props) => {
   const queryClient = useQueryClient();
 
   /** 서버컴포넌트에서 받은 userData를 react-query 기본데이터에 넣어준다. */
-  const {data: userMe} = UseApiGetUserMe(userData)
+  const {data: userMe} = UseApiGetUserMe()
 
   useEffect(() => {
     if (userMe?.result === 'success') {

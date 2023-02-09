@@ -9,6 +9,8 @@ class Settings(BaseSettings):
     ACCESS_TOKEN_TIME = 1
     REFRESH_TOKEN_TIME = 14
 
+    COOKIE_DOMAIN = os.getenv('COOKIE_DOMAIN', 'localhost')
+
     DB_TYPE: str = 'mysql+pymysql'
     DB_HOST: str = os.getenv('DB_HOST', 'localhost')
     DB_PORT: str = os.getenv('DB_PORT', 3306)
